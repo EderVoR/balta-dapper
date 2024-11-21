@@ -2,6 +2,6 @@
 
 ### Repositório de aprofundamento em Dapper
 
-### Instrutor: André Baltieri 
-
-### Curso: <html><a href="https://balta.io/cursos/acesso-dados-csharp-net-dapper-sql-server" target="_blank">Acesso à dados com .NET, C#, Dapper e SQL Server</a></html>
+#### Instrutor: André Baltieri 
+#### Banco de Dados: Postgres
+#### Curso: <html><a href="https://balta.io/cursos/acesso-dados-csharp-net-dapper-sql-server" target="_blank">Acesso à dados com .NET, C#, Dapper e SQL Server</a></html>
