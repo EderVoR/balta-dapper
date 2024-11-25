@@ -9,6 +9,6 @@ namespace balta_dapper.Models
 
         public int Id { get; set; }
         public string Title { get; set; }
-        public IList<Tags> Tags { get; set; }
+        public List<Tags> Tags { get; set; }
     }
 }
