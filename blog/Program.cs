@@ -4,6 +4,7 @@ using Npgsql;
 using Dapper.FluentMap;
 using Blog.Mappings;
 using Dapper;
+using Blog.Repositories;
 
 FluentMapper.Initialize(config => 
 {
@@ -11,8 +12,8 @@ FluentMapper.Initialize(config =>
 });
 
 var connectionPost = new NpgsqlConnection(
-    //connectionString: "User ID=postgres; Password=admin123; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
-    connectionString: "User ID=postgres; Password=3d3r3001; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
+    connectionString: "User ID=postgres; Password=admin123; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
+    //connectionString: "User ID=postgres; Password=3d3r3001; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
 );
 
 //ReadUsers(connectionPost);
@@ -21,25 +22,13 @@ var connectionPost = new NpgsqlConnection(
 //UpdateUser(connectionPost);
 DeleteUser(connectionPost);
 
-static void ReadUsers(NpgsqlConnection connectionPost)
-{
-    using (var connection = new NpgsqlCommand())
-    {
-        var users = connectionPost.GetAll<Usuario>();
-
-        foreach (var item in users)
-            Console.WriteLine($"{item.Name}");
-    }
-}
-
 static void ReadUser(NpgsqlConnection connectionPost)
 {
-    using (var connection = new NpgsqlCommand())
-    {
-        var users = connectionPost.Get<Usuario>(1);
+    var repository = new UserRepository();
+    var usuarios = repository.Get();
 
-        Console.WriteLine($"Read: {users.Name}");
-    }
+    foreach(var item in usuarios)
+        Console.WriteLine(item.Name);
 }
 
 static void CreateUser(NpgsqlConnection connectionPost)
@@ -78,13 +67,8 @@ static void UpdateUser(NpgsqlConnection connectionPost)
 {
     using (var connection = new NpgsqlCommand())
     {
-        connectionPost.Execute(@"UPDATE usuario 
-                                 set bio = @Bio
-                                 where id = @Id",
-        new {
-            @Id = 1,
-            @Bio = "Aqui estou eu"
-        });
+        connectionPost.Execute(@"UPDATE usuario set bio = @Bio where id = @Id",
+        new { @Id = 1, @Bio = "Aqui estou eu" });
 
         Console.WriteLine($"Usuario atualizado com sucesso!");
     }
@@ -94,10 +78,7 @@ static void DeleteUser(NpgsqlConnection connectionPost)
 {
     using (var connection = new NpgsqlCommand())
     {
-        connectionPost.Execute(@"delete from usuario where id = @Id",new 
-        {
-            @Id = 1
-        });
+        connectionPost.Execute(@"delete from usuario where id = @Id",new { @Id = 1 });
         Console.WriteLine($"Usuario deletado com sucesso!");
     }
 }
