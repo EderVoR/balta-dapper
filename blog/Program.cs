@@ -1,10 +1,8 @@
 ﻿using Blog.Models;
-using Dapper.Contrib.Extensions;
 using Npgsql;
 using Dapper.FluentMap;
 using Blog.Mappings;
-using Dapper;
-using Blog.Repositories;
+using blog.Repositories;
 
 FluentMapper.Initialize(config => 
 {
@@ -16,69 +14,27 @@ var connectionPost = new NpgsqlConnection(
     //connectionString: "User ID=postgres; Password=3d3r3001; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
 );
 
-//ReadUsers(connectionPost);
-//ReadUser(connectionPost);
-//CreateUser(connectionPost);
-//UpdateUser(connectionPost);
-DeleteUser(connectionPost);
+connectionPost.Open();
 
-static void ReadUser(NpgsqlConnection connectionPost)
+ReadUsers(connectionPost);
+ReadGrupos(connectionPost);
+
+connectionPost.Close();
+
+static void ReadUsers(NpgsqlConnection connectionPost)
 {
-    var repository = new UserRepository();
+    var repository = new Repository<Usuario>(connectionPost);
     var usuarios = repository.Get();
 
     foreach(var item in usuarios)
         Console.WriteLine(item.Name);
 }
 
-static void CreateUser(NpgsqlConnection connectionPost)
+static void ReadGrupos(NpgsqlConnection connectionPost)
 {
-    // var newUser = new Usuario
-    // {
-    //     Bio = "Aqui estou eu",
-    //     Email = "aqui@teste",
-    //     Image = "https>//....",
-    //     Name = "Aluno de teste",
-    //     PasswordHash = "87sfds5gsfdg56",
-    //     Slug = "aluno-de-teste"
-    // };
+    var repository = new Repository<Grupo>(connectionPost);
+    var grupos = repository.Get();
 
-    using (var connection = new NpgsqlCommand())
-    {
-        //var users = connectionPost.Insert<Usuario>(newUser);
-
-        connectionPost.Execute(@"INSERT INTO usuario (id, bio, email, image, name, password_hash, slug) VALUES (
-        @Id, @Bio, @Email, @Image, @Name, @Password, @Slug)",
-        new {
-            @Id = 1,
-            @Bio = "Aqui estou eu",
-            @Email = "aqui@teste",
-            @Image = "https>//....",
-            @Name = "Aluno de teste",
-            @Password = "87sfds5gsfdg56",
-            @Slug = "aluno-de-teste"
-        });
-
-        Console.WriteLine($"Usuario criado com sucesso!");
-    }
-}
-
-static void UpdateUser(NpgsqlConnection connectionPost)
-{
-    using (var connection = new NpgsqlCommand())
-    {
-        connectionPost.Execute(@"UPDATE usuario set bio = @Bio where id = @Id",
-        new { @Id = 1, @Bio = "Aqui estou eu" });
-
-        Console.WriteLine($"Usuario atualizado com sucesso!");
-    }
-}
-
-static void DeleteUser(NpgsqlConnection connectionPost)
-{
-    using (var connection = new NpgsqlCommand())
-    {
-        connectionPost.Execute(@"delete from usuario where id = @Id",new { @Id = 1 });
-        Console.WriteLine($"Usuario deletado com sucesso!");
-    }
+    foreach(var item in grupos)
+        Console.WriteLine(item.Name);
 }

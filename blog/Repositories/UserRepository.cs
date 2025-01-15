@@ -7,7 +7,12 @@ namespace Blog.Repositories
     public class UserRepository
     {
 
-        private NpgsqlConnection _connection = new NpgsqlConnection();
+        private readonly NpgsqlConnection _connection;
+
+        public UserRepository(NpgsqlConnection connection)
+        {
+            _connection = connection;
+        }
 
         public IEnumerable<Usuario> Get()
             => _connection.GetAll<Usuario>();        
