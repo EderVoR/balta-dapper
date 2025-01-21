@@ -12,5 +12,8 @@ namespace blog.Repositories
 
         public IEnumerable<T> Get()
             => _connection.GetAll<T>();
+
+        public void Create()
+            => _connection.CreateCommand();
     }
 }

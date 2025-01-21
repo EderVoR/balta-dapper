@@ -2,22 +2,23 @@
 using Dapper.FluentMap;
 using Blog.Mappings;
 using Blog.Screens.TagScreens;
+using desafio;
 
 FluentMapper.Initialize(config => 
 {
     config.AddMap(new UsuarioMap());
 });
 
-var connectionPost = new NpgsqlConnection(
+Database.Connection = new NpgsqlConnection(
     connectionString: "User ID=postgres; Password=admin123; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
     //connectionString: "User ID=postgres; Password=3d3r3001; Server=localhost; Database=blog; Pooling=true; TrustServerCertificate=true;"
 );
 
-connectionPost.Open();
+Database.Connection.Open();
 
 Load();
 
-connectionPost.Close();
+Database.Connection.Close();
 Console.ReadKey();
 
 static void Load()
